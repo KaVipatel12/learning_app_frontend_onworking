@@ -1,0 +1,34 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap; /* Enables responsiveness */
+  padding: 20px;
+}
+
+img {
+  width: 50%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.text-container {
+  width: 45%;
+  margin-left: 20px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column; /* Stacks content on smaller screens */
+    text-align: center;
+  }
+  img, .text-container {
+    width: 100%;
+    margin: 0;
+  }
+}
