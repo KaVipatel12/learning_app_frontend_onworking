@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify';
+import Navbar from '../components/Navbar';
 
 function ChapterPage() {
   const APP_URI = "http://localhost:8000";
   const {chapterId} = useParams()
+  const {courseId} = useParams()
   const [chapter, setChapter] = useState();
   const [isContentLoad, setContent] = useState(false)
   const token = localStorage.getItem('token')
@@ -15,7 +17,7 @@ function ChapterPage() {
     const FetchAllChapter = async () => {
       try {
         const response = await fetch(
-          `${APP_URI}/api/course/fetchchapter/${chapterId}`,
+          `${APP_URI}/api/course/fetchchapter/${courseId}/${chapterId}`,
           {
             method: "GET",
             headers: {
@@ -26,8 +28,9 @@ function ChapterPage() {
         );
   
         const data = await response.json();
+        console.log(data)
         if (response.ok) {
-            setChapter(data.msg); // Assuming `data.data` contains the array of chapters
+            setChapter(data.msg); 
             setContent(true)
         } else {
             setChapter();
@@ -43,10 +46,11 @@ function ChapterPage() {
   
     // Fetch chapters on component mount
     FetchAllChapter();
-    }, [chapterId , token , navigate]);
+    }, [chapterId , token , navigate, courseId]);
   return (
 
       <>
+      <Navbar />
     { isContentLoad ? (
         <div>
         <p> {chapter.title || "title"} </p>

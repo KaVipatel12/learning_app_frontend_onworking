@@ -18,7 +18,9 @@ nav {
   height: 80px;
   width: 100%;
 }
-
+li a{
+  text-decoration: none;
+}
 label.logo {
   color: white;
   font-size: 25px;

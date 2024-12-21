@@ -8,7 +8,7 @@ function AddChapter() {
     const { courseId } = useParams();
     const Backend_URL = "http://localhost:8000";
 
-    const [chapters, setChapters] = useState([{ title: '', description: '', video: null }]);
+    const [chapters, setChapters] = useState([{ title: '', description: '', videoUrl: ""}]);
     const [submitting, setSubmit] = useState("")
     // Handle input changes
     const handleInputChange = (index, field, value) => {
@@ -19,7 +19,7 @@ function AddChapter() {
 
     // Add new chapter field
     const addChapter = () => {
-        setChapters([...chapters, { title: '', description: '', video: null }]);
+        setChapters([...chapters, { title: '', description: '', videoUrl: '' }]);
     };
 
     // Remove chapter field
@@ -34,13 +34,7 @@ function AddChapter() {
         
         setSubmit("Submitting")
         const formData = new FormData();
-        formData.append('chapters', JSON.stringify(chapters.map(({ title, description }) => ({ title, description }))));
-        chapters.forEach((chapter, index) => {
-            if (chapter.video) {
-                formData.append('videos', chapter.video);
-            }
-        });
-
+        formData.append('chapters', JSON.stringify(chapters.map(({ title, description, videoUrl }) => ({ title, description, videoUrl }))));
         try {
             const response = await fetch(`${Backend_URL}/api/educator/addchapters/${courseId}`, {
                 method: 'POST',
@@ -55,7 +49,7 @@ function AddChapter() {
             if (response.ok) {
                 setSubmit("Submitted")
                 toast.success(data.msg);
-                setChapters([{ title: '', description: '', video: null }]); // Reset the form
+                setChapters([{ title: '', description: '', videoUrl: '' }]); // Reset the form
               } else {
               setSubmit("Not Submitted")
               toast.error(data.msg);
@@ -88,12 +82,12 @@ function AddChapter() {
                             value={chapter.description}
                             onChange={(e) => handleInputChange(index, 'description', e.target.value)}
                         />
-                        <label className="form-label">Upload Video</label>
+                        <label className="form-label">Video url</label>
                         <input
-                            type="file"
+                            type="text"
                             className="form-control"
-                            accept="video/*"
-                            onChange={(e) => handleInputChange(index, 'video', e.target.files[0])}
+                            value={chapter.videoUrl}
+                            onChange={(e) => handleInputChange(index, 'videoUrl', e.target.value)}
                         />
                         <button type="button" className="btn btn-danger mt-2" onClick={() => removeChapter(index)}>Remove Chapter</button>
                     </div>

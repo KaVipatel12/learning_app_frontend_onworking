@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
   const [isUser , setIsUser] = useState(false)
   const [isProvider , setIsProvider] = useState(false)
   const [courses, setCourses] = useState("")
+  const [isAdmin, setIsAdmin] = useState(false)
   // function of storing the tokens in the localstorage
   const storeTokenLocalStorage = (serverToken) => {
     localStorage.setItem("token", serverToken);
@@ -37,6 +38,9 @@ export const AuthProvider = ({ children }) => {
       if(response.ok){
         setLoading(false)
         setUser(data.msg);
+        if(data.msg.controll === 0){
+          setIsAdmin(true)
+        }
         setIsUser(true)
       }
     }catch(error){
@@ -94,6 +98,7 @@ export const AuthProvider = ({ children }) => {
         isProvider,
         Provider,
         courses,
+        isAdmin
       }}
     >
       {children}

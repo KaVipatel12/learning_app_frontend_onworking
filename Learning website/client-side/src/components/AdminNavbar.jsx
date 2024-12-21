@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import "../Navbar.css"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../store/Auth'
 
-function Navbar() {
+function AdminNavbar() {
 
+  const navigate = useNavigate()
   const [IsLoggedIn, setLoggedIn] = useState(false)  
-  const {User, Provider, loading, isAdmin} = useAuth(); 
+  const {User, loading, isAdmin} = useAuth(); 
+
   useEffect(() => {
-    if (User || Provider){
+    if (User && isAdmin){
       setLoggedIn(true)
+    }else{
+        navigate(-1)
     }
-  }, [User , Provider])
+  }, [User, isAdmin, navigate])
 
   return (
 <div>
@@ -31,14 +35,12 @@ function Navbar() {
     {/* Site logo */}
     <label className="logo">WowLearning</label>
     {/* Navigation links */}
-    <ul className='mb-0'>
-      <li><Link className="active" to="/">Home</Link></li>
-      <li><Link to="#">About</Link></li>
+    <ul>
+      <li><Link className="active" to="/educator/profile">Home</Link></li>
+      <li>  <Link to="/adminpanel/userlist"> userList </Link> </li>
+      <li> <Link to="/adminpanel/educatorlist"> Educators list </Link></li>    
       <li><Link to="#">Services</Link></li>
       <li><Link to="#">Contact</Link></li>
-      <li><Link to={Provider? "/educator/profile" : "/user/profile"}>profile</Link></li>      
-      <li><Link to="/user/cart" >Cart </Link></li>      
-      {isAdmin ? <li><Link to="/adminpanel" >Admin </Link></li> : null }
       {
       !loading && (
       IsLoggedIn ? (
@@ -57,4 +59,4 @@ function Navbar() {
   )
 }
 
-export default Navbar
+export default AdminNavbar

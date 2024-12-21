@@ -2,10 +2,11 @@ import React from 'react'
 
 function Loading() {
   return (
-    <div className="spinner-wrapper">
-      <div class="spinner-border text-warning" role="status">
-      </div>
+    <center>      
+    <div class="spinner-border text-warning" role="status">
+      <span class="visually-hidden">Loading...</span>
     </div>
+    </center>
   )
 }
 

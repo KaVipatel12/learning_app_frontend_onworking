@@ -1,34 +1,80 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
-// import { toast } from 'react-toastify';
 import PhotoPara from '../components/PhotoPara';
-import { Link } from 'react-router-dom';
+import Card from '../components/Card';
+import Carousel from '../components/Carousel';
+import Categories from '../components/Categories';
 
 function Home() {
   const APP_URI = "http://localhost:8000";
 
-  // Array of objects
-  const infoData = [
-    {
-      img1: "https://via.placeholder.com/100",
-      heading: "Heading 1",
-      paragraph: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, consequuntur."
+  // Array of images used on the home page upper side. 
+  const carouselImages = [
+    {     
+      index: "1",
+      img: "./photos/homeimage1.jpg",
     },
     {
-      img1: "https://via.placeholder.com/100",
-      heading: "Heading 2",
-      paragraph: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, consequuntur."
+      index: "2",
+      img: "./photos/homeimage3.jpg"
     },
     {
-      img1: "https://via.placeholder.com/100",
-      heading: "Heading 3",
-      paragraph: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore, consequuntur."
+      index: "3",
+      img: "./photos/homeimage2.jpg",
+      heading : "Get skilled by top educators"
     }
   ];
 
+  // Array of objects
+  const infoData = [
+    {
+      img1: "./photos/exp-educator.jpeg",
+      heading: "Learn from Industry Experts",
+      paragraph: "Gain practical skills through direct interaction with seasoned professionals boasting over 20 years of industry experience. Learn from the best and elevate your career with insights and expertise that only experts can provide.."
+    },
+    {
+      img1: "./photos/certificate.jpg",
+      heading: "Earn Your Certificate",
+      paragraph: "Receive a prestigious certificate upon completion, a valuable asset that can significantly boost your job prospects. This certificate serves as a testament to your newly acquired skills, helping you stand out in the competitive job market."
+    },
+    {
+      img1: "./photos/educator.jpeg",
+      heading: "Become an Educator",
+      paragraph: "Share your knowledge and passion with eager learners while earning money. Become a mentor and make a lasting impact, all while enriching your professional journey as an educator.."
+    }
+  ];
+
+  const categories = [
+    {     // filter the courses by categories
+    title : "Programming", 
+    urlLink : "course/programmin"
+  }, 
+    {     
+    title : "Data science", 
+    urlLink : "course/programmin"
+  }, 
+    {
+    title : "Machine Learning", 
+    urlLink : "course/programmin"
+  }, 
+    {
+    title : "Chatgpt", 
+    urlLink : "course/programmin"
+  }, 
+ 
+    {
+    title : "MBA", 
+    urlLink : "course/programmin"
+  }, 
+    {
+    title : "MBA", 
+    urlLink : "course/programmin"
+  }, 
+ 
+]
   // State to hold the fetched courses
   const [courses, setCourses] = useState([]);
-
+  const [loading, setLoading] = useState(true)
   // Fetch function to retrieve courses
   const FetchAllCourses = async () => {
     try {
@@ -40,14 +86,17 @@ function Home() {
       });
 
       const data = await response.json();
-      console.log("Course data")
-      console.log(data)
+      console.log("Course data");
+      console.log(data);
       if (response.ok) {
+        setLoading(false)
         setCourses(data.msg); // Assuming `data.data` contains the array of courses
       } else {
+        setLoading(false)
         setCourses([]);
       }
     } catch (error) {
+      setLoading(false)
       setCourses([]);
     }
   };
@@ -60,40 +109,26 @@ function Home() {
   return (
     <>
       <Navbar />
-<div className="container">
-
-      <h2>Explore the trending courses</h2>
-      {courses.length > 0 ? (
-        courses.map((course) => (
-  
-  <div className="card" style={{width: '18rem'}} key={course._id}>
-  <img src={`${APP_URI}${course.courseImage}`} className="card-img-top" alt="..." />
-  <div className="card-body">
-    <h5 className="card-title">{course.title}</h5>
-    <p className="card-text"> {course.price} </p>
-    <Link to={`/course/${course._id}`} className="btn btn-primary">Explore</Link>
-  </div>
-</div>
-
-        ))
-      ) : (
-        <p>No courses available.</p>
-      )}
-
-      <div>
-        {/* Static infoData mapping */}
-        {infoData.map((data, index) => (
-          <PhotoPara
-            key={index}
-            image={data.img1}
-            heading={data.heading}
-            paragraph={data.paragraph}
+      <Carousel carouselImages={carouselImages}/>
+      <center className='mt-4'>
+        <h2 style={{color : "navy" , fontFamily : "Poopins"}}>Explore the trending courses</h2> 
+        <br />
+        </center>
+        <div className="categories">
+        <Categories category={categories}/>
+        </div>
+        <Card loading={loading} courses={courses} />
+        <div>
+          {/* Static infoData mapping */}
+          {infoData.map((data, index) => (
+            <PhotoPara
+              key={index}
+              imageUrl={data.img1}
+              heading={data.heading}
+              paragraph={data.paragraph}
             />
           ))}
-
-        {/* Dynamic courses mapping */}
-      </div>
-  </div>
+        </div>
     </>
   );
 }

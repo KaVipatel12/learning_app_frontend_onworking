@@ -9,6 +9,7 @@ function CoursePage() {
   const [course, setCourse] = useState();
   const [isContentLoad, setContent] = useState(false)
   const navigate = useNavigate()
+  const token = localStorage.getItem("token")
   // Fetch function to retrieve chapters of particular course
 
   useEffect(() => {
@@ -45,6 +46,33 @@ function CoursePage() {
       FetchAllCourse();
     }, [courseId, navigate]);
 
+    const handlePurchase = async () => {
+      const courseIds = [courseId]
+      try {
+        const response = await fetch(
+          `${APP_URI}/api/purchasecourse`,
+          {
+            method: "POST",
+            headers: {
+            "Authorization" : `Bearer ${token}`,  
+            "Content-Type": "application/json"
+            },
+            body : JSON.stringify(courseIds)
+          }
+        );
+    
+        const data = await response.json();
+        console.log(data)
+        if (response.ok) {
+          toast.success(data.msg)
+        } else {
+            toast.error(data.msg)
+          }
+        } catch (error) {
+      toast.error("Error in purchasing")
+      console.log(error)
+      }
+    }
   return (
 
       <>
@@ -54,6 +82,7 @@ function CoursePage() {
         <p> {course.title || "title"} </p>
         <p> {course.description || "desc"} </p>
         <Link to={`/chapters/${course._id}`} className="btn btn-primary">Explore</Link>
+        <button className="btn btn-success" onClick={handlePurchase}>Purchase</button>
         </div>
     ): (
         <div>

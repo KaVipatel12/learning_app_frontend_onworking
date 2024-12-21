@@ -16,6 +16,10 @@ import ProviderChapterMain from './Pages/ProviderChapterMain';
 import AddChapter from './Pages/AddChapter';
 import UpdateCourse from './Pages/UpdateCourse';
 import UpdateChapter from './Pages/UpdateChapter';
+import Cart from './Pages/Cart';
+import AdminPanelHome from './Pages/AdminPanelHome';
+import AdminPanelUserList from './Pages/AdminPanelUserList';
+import AdminPanelEducatorList from './Pages/AdminPanelEducatorList';
 function App() {
   return (
     <>
@@ -26,7 +30,7 @@ function App() {
       <Route path='/register' element={< Register/>}/>
       <Route path='/login' element={< Login/>}/>
       <Route path='/chapters/:courseId' element={< Chapters/>}/>
-      <Route path='/chapter/:chapterId' element={< ChapterPage/>}/>
+      <Route path='/chapter/:courseId/:chapterId' element={< ChapterPage/>}/>
       <Route path='/course/:courseId' element={< CoursePage/>}/>
       <Route path='/user/profile' element={< UserProfile/>}/>
       <Route path='/educator/profile' element={< ProviderProfile/>}/>
@@ -38,6 +42,10 @@ function App() {
       <Route path='/mycourse/addchapter/:courseId' element={< AddChapter/>}/>
       <Route path='/mycourse/udpatecourseinfo/:courseId' element={< UpdateCourse/>}/>
       <Route path='/mycourse/updatechapterinfo/:chapterId' element={< UpdateChapter/>}/>
+      <Route path='/user/cart' element={< Cart/>}/>
+      <Route path='/adminpanel' element={< AdminPanelHome/>}/>
+      <Route path='/adminpanel/userlist' element={< AdminPanelUserList/>}/>
+      <Route path='/adminpanel/educatorlist' element={< AdminPanelEducatorList/>}/>
      </Routes>
     </BrowserRouter>
     </>
