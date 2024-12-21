@@ -8,7 +8,6 @@ import Categories from '../components/Categories';
 function Home() {
   const APP_URI = "http://localhost:8000";
 
-  // Array of images used on the home page upper side. 
   const carouselImages = [
     {     
       index: "1",
@@ -25,7 +24,6 @@ function Home() {
     }
   ];
 
-  // Array of objects
   const infoData = [
     {
       img1: "./photos/exp-educator.jpeg",
@@ -45,40 +43,26 @@ function Home() {
   ];
 
   const categories = [
-    {     // filter the courses by categories
-    title : "Programming", 
-    urlLink : "course/programmin"
-  }, 
-    {     
-    title : "Data science", 
-    urlLink : "course/programmin"
-  }, 
-    {
-    title : "Machine Learning", 
-    urlLink : "course/programmin"
-  }, 
-    {
-    title : "Chatgpt", 
-    urlLink : "course/programmin"
-  }, 
- 
-    {
-    title : "MBA", 
-    urlLink : "course/programmin"
-  }, 
-    {
-    title : "MBA", 
-    urlLink : "course/programmin"
-  }, 
- 
-]
+    { title: "Programming" },
+    { title: "Data Science" },
+    { title: "Machine Learning" },
+    { title: "Chatgpt" },
+    { title: "MBA" }
+  ];
+
   // State to hold the fetched courses
   const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true)
-  // Fetch function to retrieve courses
-  const FetchAllCourses = async () => {
+  const [loading, setLoading] = useState(true);
+  const [category, setCategory] = useState("");  // State for selected category
+
+  // Fetch function to retrieve courses based on category
+  const FetchCoursesByCategory = async (category) => {
+    setLoading(true);  // Set loading state to true while fetching
+
+    const fetchURL = category ? `/api/course/fetchcourses?category=${category}` : "/api/course/fetchcourses";  // Build URL with category if available
+
     try {
-      const response = await fetch(`${APP_URI}/api/course/fetchcourses`, {
+      const response = await fetch(`${APP_URI}${fetchURL}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -86,49 +70,45 @@ function Home() {
       });
 
       const data = await response.json();
-      console.log("Course data");
-      console.log(data);
       if (response.ok) {
-        setLoading(false)
-        setCourses(data.msg); // Assuming `data.data` contains the array of courses
+        setCourses(data.msg); // Set courses based on response
       } else {
-        setLoading(false)
-        setCourses([]);
+        setCourses([]); // Set empty array if no courses found
       }
     } catch (error) {
-      setLoading(false)
-      setCourses([]);
+      setCourses([]);  // Set empty courses array in case of error
+    } finally {
+      setLoading(false);  // Set loading state to false after fetching
     }
   };
 
-  // Fetch courses on component mount
+  // Fetch courses when category changes
   useEffect(() => {
-    FetchAllCourses();
-  }, []);
+    FetchCoursesByCategory(category);  // Fetch based on selected category
+  }, [category]);  // Trigger when category changes
 
   return (
     <>
       <Navbar />
-      <Carousel carouselImages={carouselImages}/>
-      <center className='mt-4'>
-        <h2 style={{color : "navy" , fontFamily : "Poopins"}}>Explore the trending courses</h2> 
+      <Carousel carouselImages={carouselImages} />
+      <center className="mt-4">
+        <h2 style={{ color: "#2c3e50", fontFamily: "Poopins", backgroundColor : "#f0f8ff", width : "fit-content", fontFamily : "Roboto" }}>Explore the trending courses</h2>
         <br />
-        </center>
-        <div className="categories">
-        <Categories category={categories}/>
-        </div>
-        <Card loading={loading} courses={courses} />
-        <div>
-          {/* Static infoData mapping */}
-          {infoData.map((data, index) => (
-            <PhotoPara
-              key={index}
-              imageUrl={data.img1}
-              heading={data.heading}
-              paragraph={data.paragraph}
-            />
-          ))}
-        </div>
+      </center>
+      <center className="categories">
+        <Categories categories={categories} onCategoryClick={setCategory} />
+      </center>
+      <Card loading={loading} courses={courses} />
+      <div>
+        {infoData.map((data, index) => (
+          <PhotoPara
+            key={index}
+            imageUrl={data.img1}
+            heading={data.heading}
+            paragraph={data.paragraph}
+          />
+        ))}
+      </div>
     </>
   );
 }

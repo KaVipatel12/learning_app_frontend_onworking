@@ -37,22 +37,21 @@ function Card({ loading, courses, borderRadius = "10px", backgroundColor = "whit
                     style={{ borderRadius }}
                   />
                 )}
-                <h5 className="card-title mt-2">{course.title || ""}</h5>
-                <p className="card-text">{course.price || ""}</p>
-                <span>
-                  <p
+                <h5 className="card-title mt-2" style={{color : "#2c3e50"}}>{course.title || ""}</h5>
+                <p className="card-text" style={{color : "#27ae60"}}>{course.price || ""} </p>
+ 
+                  <p                 
                     style={{
-                      backgroundColor: "rgb(164, 202, 236)",
+                      backgroundColor: " #007bff",
                       width: "fit-content",
                       borderRadius: "30px",
                       fontSize: "11px",
                       color: "white",
                       padding: "3px",
                     }}
-                  >
+                    >
                     {course.category || ""}
                   </p>
-                </span>
               </div>
               <style jsx>{`
                 .card {

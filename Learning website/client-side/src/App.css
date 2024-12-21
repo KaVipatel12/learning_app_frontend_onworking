@@ -1,6 +1,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+   background-color:  #ffffff
 }
 
 h1 {
@@ -12,6 +13,9 @@ h1 {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap; /* Enables responsiveness */
+}
+.container-para{
+  background-color: #f0f8ff;
 }
 img {
   width: 50%;
@@ -33,4 +37,59 @@ img {
     width: 100%;
     margin: 0;
   }
+}
+
+
+.category-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.category-button:hover {
+  background-color: #0056b3; /* Darken the background on hover */
+}
+
+.category-button:active {
+  background-color: white; /* White background on click */
+  color: black; /* Black text on click */
+}
+
+/* Apply specific styles for the active category (clicked) */
+.category-button.active {
+  background-color: white;
+  color: black;
+}
+
+/* Add focus styles to make buttons more accessible */
+.category-button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Add this to your CSS file */
+.categories-container {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 10px 0;
+  -ms-overflow-style: none;  /* For IE and Edge */
+  scrollbar-width: none; /* For Firefox */
+}
+
+.categories-container::-webkit-scrollbar {
+  display: none; /* Hide the scrollbar for webkit browsers (Chrome, Safari) */
+}
+
+.card-body{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }

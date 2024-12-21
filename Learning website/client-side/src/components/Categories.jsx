@@ -1,8 +1,13 @@
-import React, { useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef } from "react";
 
-function Categories({ category }) {
-  const scrollContainerRef = useRef(null);
+function Categories({ categories, onCategoryClick }) {
+  const [selectedCategory, setSelectedCategory] = useState(null); // Track the selected category
+  const scrollContainerRef = useRef(null); // Ref for the scrollable container
+
+  const handleCategoryClick = (categoryTitle) => {
+    setSelectedCategory(categoryTitle); // Set the selected category
+    onCategoryClick(categoryTitle); // Call the onCategoryClick function passed from parent
+  };
 
   const handleScroll = (direction) => {
     if (scrollContainerRef.current) {
@@ -16,7 +21,7 @@ function Categories({ category }) {
 
   return (
     <div style={{ position: "relative", overflow: "hidden", width: "100%" }}>
-      {/* Left arrow */}
+      {/* Left arrow button */}
       <button
         onClick={() => handleScroll("left")}
         style={{
@@ -37,70 +42,39 @@ function Categories({ category }) {
         &#8249;
       </button>
 
-      {/* Scrollable container */}
+      {/* Scrollable container for categories */}
       <div
-        className="card-category"
         ref={scrollContainerRef}
+        className="categories-container"
         style={{
           display: "flex",
+          gap: "1rem",
           overflowX: "auto",
           scrollBehavior: "smooth",
           padding: "10px 0",
-          gap: "1rem",
         }}
       >
-        {category?.length > 0 &&
-          category.map((category) => (
-            <Link
-              to={`/category/${category._id}`}
-              key={category._id}
-              className="card"
-              style={{
-                minWidth: "200px",
-                textDecoration: "none",
-                borderRadius: "30px",
-              }}
-            >
-              <div
-                className="card-body p-0"
-                style={{
-                  transition: "transform 0.2s",
-                  cursor: "pointer",
-                }}
-              >
-                <h5
-                  className="card-title mt-2"
-                  style={{ color: "#424242", textAlign: "center" }}
-                >
-                  {category.title || ""}
-                </h5>
-              </div>
-              <style jsx>{`
-                .card {
-                  border: 1px solid #dee2e6;
-                  transition: all 0.3s ease;
-                  background-color: #e3f2fd;
-                }
-
-                .card:hover {
-                  transform: scale(1.05);
-                  background-color: rgb(164, 202, 236);
-                  color : "black"
-                }
-
-                .card-category::-webkit-scrollbar {
-                  display: none;
-                }
-                .card-category {
-                  -ms-overflow-style: none;
-                  scrollbar-width: none;
-                }
-              `}</style>
-            </Link>
-          ))}
+        {categories.map((category, index) => (
+          <button
+            key={index}
+            className={`category-button ${selectedCategory === category.title ? 'active' : ''}`} // Add 'active' class if it's the selected one
+            onClick={() => handleCategoryClick(category.title)} // Trigger category change
+            style={{
+              padding: "10px 20px",
+              backgroundColor: selectedCategory === category.title ? "white" : "#007bff", // White background for active, blue for inactive
+              color: selectedCategory === category.title ? "black" : "white", // Black text for active, white for inactive
+              border: "none",
+              borderRadius: "30px",
+              cursor: "pointer",
+              transition: "background-color 0.3s ease, transform 0.2s ease",
+            }}
+          >
+            {category.title}
+          </button>
+        ))}
       </div>
 
-      {/* Right arrow */}
+      {/* Right arrow button */}
       <button
         onClick={() => handleScroll("right")}
         style={{
