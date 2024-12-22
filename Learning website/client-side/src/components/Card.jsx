@@ -11,7 +11,7 @@ function Card({ loading, courses, borderRadius = "10px", backgroundColor = "whit
 
   return (
     <>
-      <div className="container-card">
+      <div className="container">
         {courses?.length > 0 ? (
           courses.map((course) => (
             <Link
@@ -59,6 +59,9 @@ function Card({ loading, courses, borderRadius = "10px", backgroundColor = "whit
                   transition: all 0.3s ease; /* Smooth transition */
                 }
 
+                .card:hover {
+                  transform: scale(1.05); /* Slight scale effect */
+                }
                 .card:hover {
                   transform: scale(1.05); /* Slight scale effect */
                 }

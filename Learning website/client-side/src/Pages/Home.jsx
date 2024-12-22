@@ -92,7 +92,7 @@ function Home() {
       <Navbar />
       <Carousel carouselImages={carouselImages} />
       <center className="mt-4">
-        <h2 style={{ color: "#2c3e50", fontFamily: "Poopins", backgroundColor : "#f0f8ff", width : "fit-content", fontFamily : "Roboto" }}>Explore the trending courses</h2>
+        <h2 style={{ color: "#2c3e50", fontFamily: "Poopins", backgroundColor : "#f0f8ff", width : "fit-content"}}>Explore the trending courses</h2>
         <br />
       </center>
       <center className="categories">
