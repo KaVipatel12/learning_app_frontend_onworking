@@ -306,3 +306,26 @@ p {
       margin-top: 10px;
     }
   }
+
+  /* chapter container */
+
+.container-chapter{
+  flex-direction: row;
+  width: 100%;
+}
+
+.container-chapter:hover {
+  transform: translateY(-5px); /* Slight lift on hover */
+}
+
+.card-chapter{
+  box-shadow: rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+}
+@media (width < 800px) {
+  
+  .container-chapter{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
