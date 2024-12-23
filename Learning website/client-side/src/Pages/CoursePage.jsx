@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify';
 import Navbar from '../components/Navbar';
-
+import Loading from "../components/Loading"
+import TwoColumnLayout from '../components/TwoColumnLayout';
 function CoursePage() {
   const APP_URI = "http://localhost:8000";
   const {courseId} = useParams()
   const [course, setCourse] = useState();
-  const [isContentLoad, setContent] = useState(false)
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const token = localStorage.getItem("token")
   // Fetch function to retrieve chapters of particular course
@@ -29,15 +30,15 @@ function CoursePage() {
         console.log(data)
         if (response.ok) {
             setCourse(data.msg); // Assuming `data.data` contains the array of chapters
-            setContent(true)
+            setLoading(false)
         } else {
             setCourse();
-            setContent(false)
+            setLoading(false)
             toast.warning(data.msg)
             navigate(-1)
         }
     } catch (error) {
-        setContent(false)
+        setLoading(false)
         setCourse();
       }
     };
@@ -73,17 +74,22 @@ function CoursePage() {
       console.log(error)
       }
     }
+
+    if(loading){
+      return (
+      <>
+      <Navbar></Navbar>
+      <Loading></Loading>
+      </>
+      )
+    }
+
   return (
 
       <>
        <Navbar></Navbar>
-    { isContentLoad ? (
-        <div>
-        <p> {course.title || "title"} </p>
-        <p> {course.description || "desc"} </p>
-        <Link to={`/chapters/${course._id}`} className="btn btn-primary">Explore</Link>
-        <button className="btn btn-success" onClick={handlePurchase}>Purchase</button>
-        </div>
+    { course ? (
+        <TwoColumnLayout course={course} token={token} handlePurchase= {handlePurchase}></TwoColumnLayout>
     ): (
         <div>
             Page not loading

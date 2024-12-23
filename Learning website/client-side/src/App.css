@@ -1,7 +1,8 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-   background-color:  #ffffff
+   background-color:  #ffffff;
+   width : 100vw ;
 }
 
 h1 {
@@ -134,35 +135,40 @@ img {
     }
   }
 
+  /* Two column layout */
   .main-box {
     display: flex;
     flex-direction: row;
-    width: 90%;
-    height: 80%;
+    width: 95%;
+    height: 100%;
     gap: 1rem;
+    justify-content: center;
+    align-items: center;
   }
 
   .box-70 {
     flex: 7;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 1rem;
-    background-color: #007bff;
     padding: 1rem;
     border-radius: 10px;
-    color: white;
     overflow: auto;
+    justify-content: center;
+    align-items:center;
   }
 
   .box-70 .small-box {
     flex: 1 1 calc(33.33% - 1rem); /* 3 boxes per row with gaps */
-    background-color: #0056b3;
+    background-color: white;
     border-radius: 8px;
     padding: 1rem;
     text-align: center;
   }
 
   .box-30 {
+    width: 100%;
+    height: 100vh;
     flex: 3;
     display: flex;
     justify-content: center;
@@ -173,22 +179,130 @@ img {
 
   .box-30 img {
     width: 100%;
-    height: auto;
-    max-width: 300px;
+    height: 100%;
     border-radius: 8px;
   }
 
+  .box-button {
+    height: 80px;
+    width: 150px; 
+    border-radius: 30px;
+    font-size: 20px;
+    cursor: pointer; /* Add pointer cursor to indicate button is clickable */
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease; /* Smooth transition effects */
+}
+
+.btn-1 {
+    color: white;
+    border: 2px solid white;
+    background-color: #196ae5;
+}
+
+.btn-1:active {
+    background-color: skyblue; /* Darker blue */
+    color: #e3f2fd; /* Light blue */
+    transform: scale(0.95); /* Slightly shrink the button when clicked */
+}
+
+.btn-2 {
+    color: #196ae5;
+    background-color: white;
+    border: 2px solid #196ae5;
+}
+
+.btn-2:active {
+    background-color: #e3f2fd; /* Light blue */
+    color: #0d47a1; /* Darker blue */
+    transform: scale(0.95); /* Slightly shrink the button when clicked */
+}
+
+
+.info-container {
+  display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping of items */
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  background-color: #fff;
+  gap: 10px;
+  overflow-x: auto; /* Horizontal scrolling */
+  -ms-overflow-style: none; /* For IE and Edge (hides scrollbar) */
+  scrollbar-width: none; /* For Firefox (hides scrollbar) */
+}
+
+.info-container::-webkit-scrollbar {
+  display: none; /* Hides scrollbar for WebKit browsers (Chrome, Safari) */
+}
+.info-item {
+  flex: 1;
+  min-width: 200px; /* Ensures items wrap on smaller screens */
+  text-align: center;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.info-item:last-child {
+  border-right: none;
+}
+
+h4 {
+  font-size: 18px;
+  margin: 0;
+  color: #2c3e50;
+}
+
+p {
+  font-size: 14px;
+  color: #7f8c8d;
+}
+
+.contact-info{
+  display: flex;
+  justify-content: center;
+}
+@media (max-width: 900px) {
+  .info-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .info-item {
+    border-right: none; /* Remove border for grid view */
+    border-bottom: 1px solid #ddd;
+  }
+
+  .info-item:nth-child(odd) {
+    border-right: 1px solid #ddd; /* Add right border only for odd items in the grid */
+  }
+
+  .info-item:last-child,
+  .info-item:nth-last-child(2) {
+    border-bottom: none; /* Remove bottom border for the last row */
+  }
+}
+
+
   @media (max-width: 768px) {
     .main-box {
+      width: 100%;
       flex-direction: column; /* Stack the boxes vertically */
+      overflow: hidden;
     }
 
     .box-70, .box-30 {
       flex: none; /* Reset flex for stacked layout */
-      width: 100%; /* Full width for each box */
+      width: 70%; /* Full width for each box */
+      height: 50%;
+      overflow:visible;
     }
 
     .box-70 .small-box {
       flex: 1 1 calc(50% - 1rem); /* 2 boxes per row on smaller screens */
+    }
+    .btn-1 , .btn-2{
+      margin-top: 10px;
     }
   }
