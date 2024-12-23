@@ -73,11 +73,11 @@ function Chapters() {
                 textDecoration: "none",
                 color: "inherit",
                 width: "100%",
-                cursor: "pointer",
+                cursor: "pointer"
               }}
               key={chapter._id}
             >
-              <div className="card card-chapter m-3">
+              <div className="card card-chapter m-3" style={{backgroundColor : "#f0f8ff"}}>
                 <div className="card-body">
                   <center>
                     <p style={{color : "#8bb6de"}}> Chapter {sr + 1} </p>
