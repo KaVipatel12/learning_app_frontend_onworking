@@ -377,3 +377,7 @@ p {
     align-items: center;
   }
 }
+
+.szh-menu {
+    height: fit-content;
+    }
