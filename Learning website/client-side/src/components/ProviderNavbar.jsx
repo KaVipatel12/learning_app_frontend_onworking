@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import "../Navbar.css"
 import { Link } from 'react-router-dom'
-import { useAuth } from '../store/Auth'
 
 function ProviderNavbar() {
 

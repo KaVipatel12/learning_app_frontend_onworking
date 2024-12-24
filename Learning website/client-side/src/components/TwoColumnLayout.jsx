@@ -18,7 +18,9 @@ function TwoColumnLayout({course, token, handlePurchase}) {
     <div className="small-box" style={{backgroundColor : "#e8f0fc" , color: "#6188b0"}}> Top rated {course.category} Course</div>
     <div className="small-box"> <h1 style={{color : "#101828"}}> { course.title}</h1> </div>
     <div className="small-box" style={{color : "#949ba5"}}> <p> {course.description} </p> </div>
-    <Link to={`/chapters/${course._id}`} className="small-box"> <button className='btn box-button btn-1' style={{backgroundColor : "#196ae5"}}> Explore </button> </Link> <button className ="btn box-button btn-2" style={{border : "2px solid #196ae5"}} onClick={handleClick}> Apply Now </button>
+    <div className="button-box">
+    <Link to={`/chapters/${course._id}`} className="small-box"> <button className='btn box-button btn-1' style={{backgroundColor : "#196ae5"}}> Explore </button> </Link> <button className ="btn box-button btn-2" style={{border : "2px solid #196ae5"}} onClick={handleClick}> Apply</button>
+    </div>
     <div className="small-box"><div class="info-container">
   <div class="info-item">
     <h4> {course.rate} <span>⭐</span></h4>
