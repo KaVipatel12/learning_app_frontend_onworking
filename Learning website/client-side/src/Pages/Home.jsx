@@ -7,7 +7,6 @@ import Categories from '../components/Categories';
 
 function Home() {
   const APP_URI = "http://localhost:8000";
-
   const carouselImages = [
     {     
       index: "1",

@@ -20,6 +20,7 @@ import Cart from './Pages/Cart';
 import AdminPanelHome from './Pages/AdminPanelHome';
 import AdminPanelUserList from './Pages/AdminPanelUserList';
 import AdminPanelEducatorList from './Pages/AdminPanelEducatorList';
+import ExploreCourses from './Pages/ExploreCourses';
 function App() {
   return (
     <>
@@ -46,6 +47,7 @@ function App() {
       <Route path='/adminpanel' element={< AdminPanelHome/>}/>
       <Route path='/adminpanel/userlist' element={< AdminPanelUserList/>}/>
       <Route path='/adminpanel/educatorlist' element={< AdminPanelEducatorList/>}/>
+      <Route path='/explorecourses' element={< ExploreCourses />}/>
      </Routes>
     </BrowserRouter>
     </>

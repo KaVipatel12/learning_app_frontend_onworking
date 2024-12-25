@@ -34,7 +34,7 @@ function Navbar() {
     <ul className='mb-0'>
       <li><Link className="active" to="/">Home</Link></li>
       <li><Link to="#">About</Link></li>
-      <li><Link to="#">Services</Link></li>
+      <li><Link to="/explorecourses">Explore Courses</Link></li>
       <li><Link to="#">Contact</Link></li>
       <li><Link to={Provider? "/educator/profile" : "/user/profile"}>profile</Link></li>      
       <li><Link to="/user/cart" >Cart </Link></li>      

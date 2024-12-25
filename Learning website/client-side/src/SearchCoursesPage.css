@@ -1,0 +1,140 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .search-courses-page {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 20px;
+    padding: 20px;
+  }
+
+
+  /* Search Bar */
+  .search-bar {
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .search-bar input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .search-bar button {
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .search-bar button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Filter Bar */
+  .filter-bar {
+    flex: 0 0 250px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    display: block;
+  }
+  
+  .filter-bar h3 {
+    margin-top: 0;
+  }
+  
+  .filter-bar label {
+    display: block;
+    margin-top: 10px;
+  }
+  
+  .filter-bar input,
+  .filter-bar select {
+    width: 100%;
+    margin-top: 5px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .search-container-card{
+    width: 100%;
+  }
+  /* Main Section */
+  .main-section {
+    flex-grow: 1;
+    gap: 20px;
+  }
+  
+  .course-card {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: white;
+    text-align: center;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .search-courses-page {
+      flex-direction: column;
+    }
+  
+    .filter-bar {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100%;
+      background-color: #f8f9fa;
+      z-index: 1000;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+  
+    .filter-bar.active {
+      display: block;
+      transform: translateX(0);
+    }
+  
+    .main-section {
+      margin-top: 20px;
+    }
+  }
+  
+  /* Toggle Button for Filter Bar */
+  .toggle-filter {
+    display: none;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .toggle-filter:hover {
+    background-color: #0056b3;
+  }
+
+  @media (max-width: 768px) {
+    .toggle-filter {
+      display: block;
+      margin-bottom: 15px;
+    }
+  }
+  

@@ -1,6 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 export const Authcontext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -11,7 +9,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const [isUser , setIsUser] = useState(false)
   const [isProvider , setIsProvider] = useState(false)
-  const [courses, setCourses] = useState("")
   const [isAdmin, setIsAdmin] = useState(false)
   // function of storing the tokens in the localstorage
   const storeTokenLocalStorage = (serverToken) => {
@@ -97,7 +94,6 @@ export const AuthProvider = ({ children }) => {
         isUser,
         isProvider,
         Provider,
-        courses,
         isAdmin
       }}
     >

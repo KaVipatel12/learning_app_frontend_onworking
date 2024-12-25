@@ -68,7 +68,7 @@ function ChapterPage() {
         <video src="" class="object-fit-contain" autoplay></video>
         <div className='chapter-main'>
         <h3  style={{color : "#2c3e50", fontWeight: "bold"}}> {chapter.title.charAt(0).toUpperCase() + chapter.title.slice(1) || "title"} </h3>
-        <p className="card card-chapter m-3 p-3" style={{backgroundColor : "#f0f8ff", color : "#333333"}}>{chapter.description.charAt(0).toUpperCase() + chapter.description.slice(1) + "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Est ullam corporis doloremque quisquam nobis similique esse facilis asperiores corrupti omnis pariatur, maxime quod magni incidunt at laudantium amet repellat! Distinctio." || "desc"} </p>
+        <p className="card card-chapter m-3 p-3" style={{backgroundColor : "#f0f8ff", color : "#1A1A1A"}}>{chapter.description.charAt(0).toUpperCase() + chapter.description.slice(1) + "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Est ullam corporis doloremque quisquam nobis similique esse facilis asperiores corrupti omnis pariatur, maxime quod magni incidunt at laudantium amet repellat! Distinctio." || "desc"} </p>
          
          <div className="chapter-flex-box">
          <ReviewStars></ReviewStars>

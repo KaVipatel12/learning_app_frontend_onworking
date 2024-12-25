@@ -11,7 +11,7 @@ function Card({ loading, courses, borderRadius = "10px", backgroundColor = "whit
 
   return (
     <>
-      <div className="container">
+      <div className="container search-container-card">
         {courses?.length > 0 ? (
           courses.map((course) => (
             <Link
