@@ -48,7 +48,9 @@ function CoursePage() {
     }, [courseId, navigate]);
 
     const handlePurchase = async () => {
-      const courseIds = [courseId]
+      const title = course.title
+      const category = course.category
+      const courseData = [{courseId , title , category }]
       try {
         const response = await fetch(
           `${APP_URI}/api/purchasecourse`,
@@ -58,7 +60,7 @@ function CoursePage() {
             "Authorization" : `Bearer ${token}`,  
             "Content-Type": "application/json"
             },
-            body : JSON.stringify(courseIds)
+            body : JSON.stringify(courseData)
           }
         );
     

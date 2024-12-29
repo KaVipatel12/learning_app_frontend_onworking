@@ -1,0 +1,19 @@
+.body{
+    width : "100vw"
+}
+
+.flex-box-profile{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+::-webkit-scrollbar {
+    display: none; /* Hides the scrollbar */
+  }
+  
+  /* For Firefox */
+  * {
+    scrollbar-width: none; /* Disables the scrollbar */
+  }

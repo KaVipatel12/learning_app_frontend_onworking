@@ -136,5 +136,39 @@ body {
       display: block;
       margin-bottom: 15px;
     }
-  }
+}
   
+
+.filter-bar {
+  position: fixed; /* Overlay on top of the main section */
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 30%; /* Width of the filter slider */
+  background-color: #f8f9fa;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Higher than the main section */
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+}
+
+.filter-bar.active {
+  transform: translateX(0);
+}
+
+.close-filter {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.close-filter:hover {
+  background-color: #0056b3;
+}

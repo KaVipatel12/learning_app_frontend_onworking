@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../SearchCoursesPage.css";
 import Card from "../components/Card";
 import Categories from "../components/Categories";
+import Navbar from "../components/Navbar";
 
 const ExploreCourses = () => {
   const [isFilterVisible, setFilterVisible] = useState(false);
@@ -60,7 +61,9 @@ const ExploreCourses = () => {
   }, [courseName, price]);
 
   return (
-    <div className="search-courses-page">
+  <>
+  <Navbar />
+     <div className="search-courses-page">
       {/* Search Bar */}
       <div className="search-bar">
         <input
@@ -97,6 +100,7 @@ const ExploreCourses = () => {
         </div>
       </div>
     </div>
+  </>
   );
 };
 
