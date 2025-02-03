@@ -38,7 +38,7 @@ function Navbar() {
       <li><Link to="#">Contact</Link></li>
       <li><Link to={Provider? "/educator/profile" : "/user/profile"}>profile</Link></li>      
       <li><Link to="/user/cart" >Cart </Link></li>      
-      {isAdmin ? <li><Link to="/adminpanel" >Admin </Link></li> : null }
+      {isAdmin ? <li><Link to="/adminpanel/userlist" >Admin </Link></li> : null }
       {
       !loading && (
       IsLoggedIn ? (

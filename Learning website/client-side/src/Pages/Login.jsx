@@ -32,7 +32,11 @@ function Login() {
         const token = data.token; 
         storeTokenLocalStorage(token)
         toast.success('Login Successful');
-            navigate("/home");
+        if(data.role === "provider"){
+          navigate("/educator/profile");
+        }else{
+          navigate("/home")
+        }
           }
           else {
             setLoading(false)

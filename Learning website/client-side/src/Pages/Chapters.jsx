@@ -47,11 +47,11 @@ function Chapters() {
 
     if (User && User.purchaseCourse) {
       const purchased = User.purchaseCourse.some(
-        (course) => course.course === courseId
+        (course) => course.courseId === courseId
       );
       setIsCoursePurchased(purchased);
     }
-  }, [User, courseId, FetchAllChapter]);
+  }, [FetchAllChapter, User , courseId]);
 
   const handleNavigate = (courseId, chapterId) => {
     if (isCoursePurchased) {

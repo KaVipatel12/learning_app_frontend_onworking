@@ -38,7 +38,9 @@ function Register() {
         const token = data.token;
         storeTokenLocalStorage(token);
         toast.success("Registration Successful");
-        navigate("/home");
+        if(role === "provider"){
+        navigate("/educator/profile");
+        }
       } else {
         setLoading(false);
         toast.error(data.extraDetails ? data.extraDetails : data.message);
@@ -134,9 +136,9 @@ function Register() {
                 <input
                   type="radio"
                   name="role"
-                  value="educator"
+                  value="provider"
                   onChange={(e) => setRole(e.target.value)}
-                  checked={role === "educator"}
+                  checked={role === "provider"}
                   style={{ marginRight: "10px" }}
                 />
                 Educator

@@ -37,12 +37,12 @@ function App() {
       <Route path='/educator/profile' element={< ProviderProfile/>}/>
       <Route path='/educator/AddCourse' element={< AddCourse/>}/>
       <Route path='/educator/fetchMyCourse' element={< FetchCoursesProvider/>}/>
-      <Route path='/mycourse/:courseId' element={< ProviderCourseMainPage/>}/>
-      <Route path='/mycourse/chapters/:courseId' element={< ProviderChapters/>}/>
-      <Route path='/mycourse/chapter/:chapterId' element={< ProviderChapterMain/>}/>
-      <Route path='/mycourse/addchapter/:courseId' element={< AddChapter/>}/>
-      <Route path='/mycourse/udpatecourseinfo/:courseId' element={< UpdateCourse/>}/>
-      <Route path='/mycourse/updatechapterinfo/:chapterId' element={< UpdateChapter/>}/>
+      <Route path='/educator/mycourse/:courseId' element={< ProviderCourseMainPage/>}/>
+      <Route path='/educator/mycourse/chapters/:courseId' element={< ProviderChapters/>}/>
+      <Route path='/educator/mycourse/chapter/:chapterId' element={< ProviderChapterMain/>}/>
+      <Route path='/educator/mycourse/addchapter/:courseId' element={< AddChapter/>}/>
+      <Route path='/educator/mycourse/udpatecourseinfo/:courseId' element={< UpdateCourse/>}/>
+      <Route path='/educator/mycourse/updatechapterinfo/:chapterId' element={< UpdateChapter/>}/>
       <Route path='/user/cart' element={< Cart/>}/>
       <Route path='/adminpanel' element={< AdminPanelHome/>}/>
       <Route path='/adminpanel/userlist' element={< AdminPanelUserList/>}/>

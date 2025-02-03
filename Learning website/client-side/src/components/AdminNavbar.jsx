@@ -36,11 +36,9 @@ function AdminNavbar() {
     <label className="logo">WowLearning</label>
     {/* Navigation links */}
     <ul>
-      <li><Link className="active" to="/educator/profile">Home</Link></li>
-      <li>  <Link to="/adminpanel/userlist"> userList </Link> </li>
+      <li><Link className="active" to="/home">Home</Link></li>
+      <li>  <Link to="/adminpanel/userlist"> UserList </Link> </li>
       <li> <Link to="/adminpanel/educatorlist"> Educators list </Link></li>    
-      <li><Link to="#">Services</Link></li>
-      <li><Link to="#">Contact</Link></li>
       {
       !loading && (
       IsLoggedIn ? (

@@ -23,9 +23,8 @@ function ProviderNavbar() {
     <label className="logo">WowLearning</label>
     {/* Navigation links */}
     <ul>
-      <li><Link className="active" to="/home">Home</Link></li>
-      <li><Link to="/user/userlist">User lists</Link></li>      
-      <li><Link to="/educator/educatorlist">Educators list</Link></li>      
+      <li><Link className="active" to="/educator/profile">Home</Link></li>
+      <li><Link to="/educator/AddCourse">Add courses</Link></li>      
       <li><Link to="/logout">logout</Link></li>      
     </ul>
   </nav>

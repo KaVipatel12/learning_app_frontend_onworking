@@ -9,6 +9,7 @@ function CoursePage() {
   const {courseId} = useParams()
   const [course, setCourse] = useState();
   const [loading, setLoading] = useState(false)
+  const [purchaseLoading, setPurchaseLoading] = useState(false)
   const navigate = useNavigate()
   const token = localStorage.getItem("token")
   // Fetch function to retrieve chapters of particular course
@@ -48,6 +49,7 @@ function CoursePage() {
     }, [courseId, navigate]);
 
     const handlePurchase = async () => {
+      setPurchaseLoading(true)
       const title = course.title
       const category = course.category
       const courseData = [{courseId , title , category }]
@@ -68,12 +70,14 @@ function CoursePage() {
         console.log(data)
         if (response.ok) {
           toast.success(data.msg)
+          setPurchaseLoading(false)
         } else {
-            toast.error(data.msg)
-          }
-        } catch (error) {
-      toast.error("Error in purchasing")
-      console.log(error)
+          toast.error(data.msg)
+          setPurchaseLoading(false)
+        }
+      } catch (error) {
+        toast.error("Error in purchasing")
+        setPurchaseLoading(false)
       }
     }
 
@@ -91,7 +95,7 @@ function CoursePage() {
       <>
        <Navbar></Navbar>
     { course ? (
-        <TwoColumnLayout course={course} token={token} handlePurchase= {handlePurchase}></TwoColumnLayout>
+        <TwoColumnLayout course={course} token={token} handlePurchase= {handlePurchase} purchaseLoading={purchaseLoading}></TwoColumnLayout>
     ): (
         <div>
             Page not loading

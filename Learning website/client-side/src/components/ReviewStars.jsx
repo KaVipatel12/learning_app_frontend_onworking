@@ -73,7 +73,7 @@ function ReviewStars() {
     return (
         <div style={{marginTop : "30px"}}>
             <center>
-               { stars === 0 ? (<h5 style={{ color : "#6b4848", fontWeight:"bold"}}>Rate our course</h5> ) : (<h5 style={{ color : "#6b4848", fontWeight:"bold"}}> Update Review </h5>) }
+               { stars === 0 ? (<h5 style={{ color : "#6b4848", fontWeight:"bold"}}>Rate our course</h5> ) : (<h5 style={{ color : "#6b4848", fontWeight:"bold"}}> Your Review </h5>) }
             </center>
 
             {

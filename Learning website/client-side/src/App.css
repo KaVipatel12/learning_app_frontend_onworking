@@ -389,3 +389,43 @@ p {
 .szh-menu {
     height: fit-content;
     }
+
+
+/* admin panel */
+
+.userlistMain{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Alternating row colors with fixed (hardprint) colors */
+.table-auto tbody tr:nth-child(even) {
+  background-color: #e0e0e0; /* Light Gray */
+}
+
+.table-auto tbody tr:nth-child(odd) {
+  background-color: #ffffff; /* White */
+}
+
+/* Keep the same color on hover */
+.table-auto tbody tr:hover {
+  transform: scale(1.05);
+}
+
+/* Even row hover effect */
+.table-auto tbody tr:nth-child(even):hover {
+  background-color: #d6d6d6; /* Slightly darker Gray */
+}
+
+/* Odd row hover effect */
+.table-auto tbody tr:nth-child(odd):hover {
+  background-color: #f0f0f0; /* Slightly darker White */
+}
+
+/* Smooth transition effect */
+.table-auto tbody tr {
+  transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+

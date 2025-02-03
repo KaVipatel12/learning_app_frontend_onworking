@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import Loading from "../components/Loading.jsx"; 
+import Loading from "../components/Loading.jsx";
 
-function TwoColumnLayout({ course, token, handlePurchase }) {
+function TwoColumnLayout({ course, token, handlePurchase, purchaseLoading }) {
   const APP_URI = "http://localhost:8000";
   const [ratings, setRatings] = useState(null); // Null indicates no fetch attempt yet
   const [loading, setLoading] = useState(false);
@@ -20,10 +20,13 @@ function TwoColumnLayout({ course, token, handlePurchase }) {
   const fetchRating = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${APP_URI}/api/course/fetchallreviews/${courseId}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await fetch(
+        `${APP_URI}/api/course/fetchallreviews/${courseId}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       const data = await response.json();
       if (response.ok) {
@@ -68,13 +71,25 @@ function TwoColumnLayout({ course, token, handlePurchase }) {
                 Explore
               </button>
             </Link>
-            <button
-              className="btn box-button btn-2"
-              style={{ border: "2px solid #196ae5" }}
-              onClick={handleClick}
-            >
-              Apply
-            </button>
+            {!purchaseLoading ? (
+              <button
+                className="btn box-button btn-2"
+                style={{ border: "2px solid #196ae5" }}
+                onClick={handleClick}
+              >
+                Apply
+              </button>
+            ) : (
+              <button class="btn btn-warning box-button" type="button" disabled>
+                <span
+                  class="spinner-border spinner-border-sm"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden" role="status">
+                  Loading...
+                </span>
+              </button>
+            )}
           </div>
           <div className="small-box">
             <div className="info-container">

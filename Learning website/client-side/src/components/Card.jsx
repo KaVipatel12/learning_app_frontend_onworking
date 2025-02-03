@@ -2,7 +2,7 @@ import React from "react";
 import Loading from "./Loading";
 import { Link } from "react-router-dom";
 
-function Card({ loading, courses, borderRadius = "10px", backgroundColor = "white" }) {
+function Card({ loading = false, courses, borderRadius = "10px", backgroundColor = "white"}) {
   const APP_URI = "http://localhost:8000";
 
   if (loading) {
@@ -14,8 +14,9 @@ function Card({ loading, courses, borderRadius = "10px", backgroundColor = "whit
       <div className="container search-container-card">
         {courses?.length > 0 ? (
           courses.map((course) => (
+            
             <Link
-              to={`/course/${course._id}`}
+              to={!course.courseId ? (`/course/${course._id}`) : (`/course/${course.courseId}`)}
               key={course._id}
               className="card m-3"
               style={{ width: "18rem", textDecoration: "none" }}
@@ -52,6 +53,18 @@ function Card({ loading, courses, borderRadius = "10px", backgroundColor = "whit
                     >
                     {course.category || ""}
                   </p>
+                  {                    
+                    course.purchaseDate &&
+                  <p                 
+                    style={{
+                      fontSize: "11px",
+                      color: "black",
+                      padding: "3px",
+                    }}
+                    >
+                    Enrolled on : { new Date(course.purchaseDate).toLocaleDateString() || ""}
+                  </p>
+                  }
               </div>
               <style jsx>{`
                 .card {
