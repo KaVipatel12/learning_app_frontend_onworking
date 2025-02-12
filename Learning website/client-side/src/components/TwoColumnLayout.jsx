@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Loading from "../components/Loading.jsx";
+import { toast } from "react-toastify";
+import ModalComponent from "./ModalComponent.jsx";
 
-function TwoColumnLayout({ course, token, handlePurchase, purchaseLoading }) {
+function TwoColumnLayout({ course, token, handlePurchase, purchaseLoading, isModify }) {
   const APP_URI = "http://localhost:8000";
   const [ratings, setRatings] = useState(null); // Null indicates no fetch attempt yet
   const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const navigate = useNavigate();
   const { courseId } = useParams();
 
@@ -17,7 +20,36 @@ function TwoColumnLayout({ course, token, handlePurchase, purchaseLoading }) {
     }
   };
 
-  const fetchRating = async () => {
+
+  // Function to delete the course by only educator. 
+  const deleteCourse = async () => {
+    setDeleteLoading(true);
+    try {
+      const response = await fetch(
+        `${APP_URI}/api/educator/deletecourse/${courseId}`,
+        {
+          method: "DELETE",
+          headers: {
+             "Content-Type": "application/json",
+             "Authorization" : `Bearer ${token}`
+          },
+        }
+      );
+
+      if (response.ok) {
+        toast.success("Course Deleted successfully") // Assuming `msg` contains the ratings
+        navigate(-1)
+      } else {
+        toast.success("Error") // Assuming `msg` contains the ratings
+      }
+    } catch (error) {
+      toast.success("Error") // Assuming `msg` contains the ratings
+    } finally {
+      setDeleteLoading(false);
+    }
+  }
+
+  const fetchRating = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(
@@ -40,11 +72,11 @@ function TwoColumnLayout({ course, token, handlePurchase, purchaseLoading }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [courseId]);
 
   useEffect(() => {
     fetchRating();
-  }, [courseId]);
+  }, [fetchRating]);
 
   return (
     <>
@@ -71,25 +103,41 @@ function TwoColumnLayout({ course, token, handlePurchase, purchaseLoading }) {
                 Explore
               </button>
             </Link>
-            {!purchaseLoading ? (
+            {isModify? (
+                <>
+              <Link to={`/educator/mycourse/udpatecourseinfo/${course._id}`} className="small-box">
               <button
                 className="btn box-button btn-2"
                 style={{ border: "2px solid #196ae5" }}
                 onClick={handleClick}
-              >
+                >
+                Update
+                </button>
+                </Link>
+                <ModalComponent func={deleteCourse} alert={"Delete"} alertTitle={"Delete course"} alertMessage={"By clicking, It will delete all the resources of course for permanent."} buttonStyle={"danger"} confirm={"Delete"} titleColor={"red"} loading={deleteLoading} />
+                </>
+                ) : (
+              !purchaseLoading ? (
+                <button
+                className="btn box-button btn-2"
+                style={{ border: "2px solid #196ae5" }}
+                onClick={handleClick}
+                >
                 Apply
-              </button>
-            ) : (
+                </button>
+              ) : (
               <button class="btn btn-warning box-button" type="button" disabled>
-                <span
-                  class="spinner-border spinner-border-sm"
-                  aria-hidden="true"
-                ></span>
-                <span class="visually-hidden" role="status">
-                  Loading...
-                </span>
+              <span
+              class="spinner-border spinner-border-sm"
+              aria-hidden="true"
+              ></span>
+              <span class="visually-hidden" role="status">
+              Loading...
+              </span>
               </button>
+            )  
             )}
+               
           </div>
           <div className="small-box">
             <div className="info-container">

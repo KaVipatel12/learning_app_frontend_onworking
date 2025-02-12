@@ -8,6 +8,7 @@ function CoursePage() {
   const APP_URI = "http://localhost:8000";
   const {courseId} = useParams()
   const [course, setCourse] = useState();
+  const [isModify, setIsModify] = useState(false);  // Checking if the course belongs to provider or not
   const [loading, setLoading] = useState(false)
   const [purchaseLoading, setPurchaseLoading] = useState(false)
   const navigate = useNavigate()
@@ -15,7 +16,8 @@ function CoursePage() {
   // Fetch function to retrieve chapters of particular course
 
   useEffect(() => {
-    const FetchAllCourse = async () => {
+    const FetchCourse = async () => {
+      setLoading(true)
       try {
         const response = await fetch(
           `${APP_URI}/api/course/fetchcoursemainpage/${courseId}`,
@@ -23,6 +25,7 @@ function CoursePage() {
             method: "GET",
             headers: {
             "Content-Type": "application/json",
+            "Authorization" : `Bearer ${token}`
             },
           }
         );
@@ -31,6 +34,7 @@ function CoursePage() {
         console.log(data)
         if (response.ok) {
             setCourse(data.msg); // Assuming `data.data` contains the array of chapters
+            setIsModify(data.isCourseModify)
             setLoading(false)
         } else {
             setCourse();
@@ -41,12 +45,14 @@ function CoursePage() {
     } catch (error) {
         setLoading(false)
         setCourse();
-      }
+      }finally{
+        setLoading(false); 
+    }
     };
   
     // Fetch chapters on component mount
-      FetchAllCourse();
-    }, [courseId, navigate]);
+      FetchCourse();
+    }, [courseId, navigate, token]);
 
     const handlePurchase = async () => {
       setPurchaseLoading(true)
@@ -95,7 +101,7 @@ function CoursePage() {
       <>
        <Navbar></Navbar>
     { course ? (
-        <TwoColumnLayout course={course} token={token} handlePurchase= {handlePurchase} purchaseLoading={purchaseLoading}></TwoColumnLayout>
+        <TwoColumnLayout course={course} token={token} handlePurchase= {handlePurchase} purchaseLoading={purchaseLoading} isModify={isModify}></TwoColumnLayout>
     ): (
         <div>
             Page not loading

@@ -46,7 +46,7 @@ function UpdateChapter() {
           } else {
             setContent(false);
             toast.warning(data.msg);
-            navigate("/dashboard");
+            navigate(-1);
           }
         } catch (error) {
           setContent(false);
@@ -81,7 +81,7 @@ function UpdateChapter() {
   
         if (response.ok) {
           toast.success(data.msg);
-          navigate("/dashboard");
+          navigate(-1);
         } else {
           toast.error(data.msg);
         }

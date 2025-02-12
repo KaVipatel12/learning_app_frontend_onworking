@@ -1,14 +1,19 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useAuth } from "../store/Auth";
 import { toast } from "react-toastify";
+import "../App.js"
+import Loading from "../components/Loading.jsx";
 
 function Chapters() {
   const APP_URI = "http://localhost:8000";
+  const token = localStorage.getItem("token");
   const { courseId } = useParams();
   const [chapters, setChapters] = useState([]);
   const [isCoursePurchased, setIsCoursePurchased] = useState(false);
+  const [isModify, setIsModify] = useState(false); 
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
   const { User } = useAuth();
 
@@ -19,6 +24,7 @@ function Chapters() {
 
   // Fetch function to retrieve chapters of the particular course
   const FetchAllChapter = useCallback(async () => {
+    setLoading(true)
     try {
       const response = await fetch(
         `${APP_URI}/api/course/fetchchaptersmainpage/${courseId}`,
@@ -26,6 +32,7 @@ function Chapters() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            "Authorization" : `Bearer ${token}`
           },
         }
       );
@@ -33,13 +40,16 @@ function Chapters() {
       const data = await response.json();
       if (response.ok) {
         setChapters(data.msg); // Assuming `data.msg` contains the chapters
+        setIsModify(data.isCourseModify); 
       } else {
         setChapters([]);
       }
     } catch (error) {
       setChapters([]);
+    }finally{
+      setLoading(false)
     }
-  }, [APP_URI, courseId]);
+  }, [APP_URI, courseId, token]);
 
   // UseEffect to fetch chapters and check purchase status
   useEffect(() => {
@@ -51,19 +61,32 @@ function Chapters() {
       );
       setIsCoursePurchased(purchased);
     }
+
   }, [FetchAllChapter, User , courseId]);
 
   const handleNavigate = (courseId, chapterId) => {
-    if (isCoursePurchased) {
+    if (isCoursePurchased || isModify) {
       navigate(`/chapter/${courseId}/${chapterId}`);
     } else {
       toast.warning("Course not purchased");
     }
   };
 
+  if(loading){
+    return(
+    <>
+    <Navbar />
+    <Loading/>
+    </>
+    ) 
+  }
   return (
     <>
       <Navbar />
+      {/* Course owner can add courses*/}
+      {isModify &&
+      <div className="header-container"> <Link to={`/educator/mycourse/addchapter/${courseId}`} className="header-icon" style={{ textDecoration: 'none' }}><i class="ri-add-line"></i></Link></div>
+      }
       <div className="container-chapter">
         {chapters.length > 0 ? (
           chapters.map((chapter, sr) => (
@@ -87,7 +110,7 @@ function Chapters() {
                   </h4>
                   <p className="card-text"> {chapter.price} </p>
                   <p className="card-text" style={{color : "#f5a623"}}>
-                    {!isCoursePurchased && "Not Purchased"}
+                    {!isCoursePurchased ? (isModify ? ("My course") : (null)) : ("Not Purchased")}
                   </p>
                 </div>
               </div>

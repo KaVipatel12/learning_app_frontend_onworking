@@ -2,18 +2,19 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { CommentSection } from 'react-comments-section';
 import 'react-comments-section/dist/index.css';
 import { useAuth } from '../store/Auth';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loading from './Loading';
 
 
 const CommentBox = () => {
-  const { User } = useAuth();
+  const { User, Provider } = useAuth();
   const { chapterId, courseId } = useParams();
   const token = localStorage.getItem('token');
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
   const [comments, setComments] = useState([]);
+  const navigate = useNavigate()
   const APP_API_URL = "http://localhost:8000"
 
   const fetchComments = useCallback(async () => {
@@ -42,11 +43,9 @@ const CommentBox = () => {
           replies: item.replies || [],
         }));
         setComments(formattedComments);
-      } else {
-        toast.error(data.msg);
-      }
+      } 
     } catch (error) {
-      toast.error('Error fetching comments');
+      console.log("Error in fetching comment")
     } finally {
       setLoading(false);
     }
@@ -65,7 +64,7 @@ const CommentBox = () => {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
+           'Content-Type': 'application/json',
           },
           body: JSON.stringify({ comment: data.text }),
         }
@@ -161,11 +160,17 @@ const CommentBox = () => {
                 currentUserImg: `https://ui-avatars.com/api/?name=${User.username}&background=random`,
                 currentUserFullName: User.username,
               }
-            : null
+            : (
+              Provider ? {
+                currentUserId: Provider._id,
+                currentUserImg: `https://ui-avatars.com/api/?name=${Provider.username}&background=random`,
+                currentUserFullName: Provider.username,
+              } : null
+            ) 
         }
         logIn={{
-          onLogin: () => alert('Redirect to login'),
-          signUpLink: '/signup',
+          onLogin: () => navigate("/login"),
+          signUpLink: '/login',
         }}
         commentData={comments}
         onSubmitAction={handleAddComment}

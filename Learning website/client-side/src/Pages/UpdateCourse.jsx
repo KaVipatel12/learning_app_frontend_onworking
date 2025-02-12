@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import {useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ProviderNavbar from '../components/ProviderNavbar';
 
@@ -17,7 +17,7 @@ function UpdateCourse() {
   const [duration, setDuration] = useState("");
   const [level, setLevel] = useState("");
   const [language, setLanguage] = useState("");
-
+  
   useEffect(() => {
     if (!token) {
       toast.error("You are not authenticated. Please log in.");
@@ -25,10 +25,10 @@ function UpdateCourse() {
       return;
     }
 
-    const FetchAllCourse = async () => {
+    const fetchCourse = async () => {
       try {
         const response = await fetch(
-          `${APP_URI}/api/educator/fetchcoursemainpage/${courseId}`,
+          `${APP_URI}/api/course/fetchcoursemainpage/${courseId}`,
           {
             method: "GET",
             headers: {
@@ -39,7 +39,7 @@ function UpdateCourse() {
         );
 
         const data = await response.json();
-
+        console.log(data)
         if (response.ok) {
           setContent(true);
           const { title, description, category, price, duration, level, language } = data.msg;
@@ -52,8 +52,8 @@ function UpdateCourse() {
           setLanguage(language || "");
         } else {
           setContent(false);
+          console.log(data.error)
           toast.warning(data.msg);
-          navigate("/dashboard");
         }
       } catch (error) {
         setContent(false);
@@ -62,7 +62,7 @@ function UpdateCourse() {
       }
     };
 
-    FetchAllCourse();
+    fetchCourse();
   }, [courseId, navigate, token]);
 
   const handleSubmit = async (e) => {
@@ -92,7 +92,7 @@ function UpdateCourse() {
 
       if (response.ok) {
         toast.success(data.msg);
-        navigate("/dashboard");
+        navigate(-1);
       } else {
         toast.error(data.msg);
       }
@@ -120,14 +120,12 @@ function UpdateCourse() {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="description" className="form-label">Description</label>
-            <input
-              type="text"
-              className="form-control"
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
+          <label htmlFor="description" className="form-label">Description</label>
+          <div class="form-floating">
+            <textarea className="form-control" placeholder="Write description here" id="floatingTextarea2" style= {{height : "100px"}} value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            ></textarea>
+          </div>
           </div>
           <div className="mb-3">
             <label htmlFor="category" className="form-label">Category</label>

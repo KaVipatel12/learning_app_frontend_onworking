@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 function FetchCoursesProvider() {
     
-    const APP_URI = "http://localhost:8000"
+    const APP_URI = "http://localhost:8000"; 
     const [courses, setCourses] = useState("")
 
     const FetchAllCourses = async () => {
