@@ -3,12 +3,18 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Loading from "../components/Loading.jsx";
 import { toast } from "react-toastify";
 import ModalComponent from "./ModalComponent.jsx";
+import { useAuth } from "../store/Auth.js";
 
 function TwoColumnLayout({ course, token, handlePurchase, purchaseLoading, isModify }) {
   const APP_URI = "http://localhost:8000";
-  const [ratings, setRatings] = useState(null); // Null indicates no fetch attempt yet
+  const [ratings, setRatings] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [cartLoading, setCartLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [isCoursePurchased, setIsCoursePurchased] = useState(false);
+  const [isCart, setIsCart] = useState(false);
+  const { cart, User } = useAuth(); 
+
   const navigate = useNavigate();
   const { courseId } = useParams();
 
@@ -20,72 +26,97 @@ function TwoColumnLayout({ course, token, handlePurchase, purchaseLoading, isMod
     }
   };
 
-
-  // Function to delete the course by only educator. 
   const deleteCourse = async () => {
     setDeleteLoading(true);
     try {
-      const response = await fetch(
-        `${APP_URI}/api/educator/deletecourse/${courseId}`,
-        {
-          method: "DELETE",
-          headers: {
-             "Content-Type": "application/json",
-             "Authorization" : `Bearer ${token}`
-          },
-        }
-      );
+      const response = await fetch(`${APP_URI}/api/educator/deletecourse/${courseId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+      });
 
       if (response.ok) {
-        toast.success("Course Deleted successfully") // Assuming `msg` contains the ratings
-        navigate(-1)
+        toast.success("Course Deleted successfully");
+        navigate(-1);
       } else {
-        toast.success("Error") // Assuming `msg` contains the ratings
+        toast.error("Error");
       }
     } catch (error) {
-      toast.success("Error") // Assuming `msg` contains the ratings
+      toast.error("Error");
     } finally {
       setDeleteLoading(false);
     }
-  }
+  };
 
   const fetchRating = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        `${APP_URI}/api/course/fetchallreviews/${courseId}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const response = await fetch(`${APP_URI}/api/course/fetchallreviews/${courseId}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
 
       const data = await response.json();
       if (response.ok) {
-        setRatings(data.msg); // Assuming `msg` contains the ratings
+        setRatings(data.msg);
       } else {
-        setRatings(null); // No ratings available
+        setRatings(null);
       }
     } catch (error) {
       console.log(error);
-      setRatings(null); // Handle fetch failure
+      setRatings(null);
     } finally {
       setLoading(false);
     }
   }, [courseId]);
 
+  const addToCart = async () => {
+    setCartLoading(true);
+    try {
+      const response = await fetch(
+        `${APP_URI}/api/cartfunctionality/${courseId}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json", "Authorization" : `Bearer ${token}` },
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setIsCart((prev) => !prev);
+        toast.success(data.msg);
+      } else {
+        toast.error("Error");
+      }
+    } catch (error) {
+      toast.error("Error");
+    } finally {
+      setCartLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchRating();
   }, [fetchRating]);
+
+  useEffect(() => {
+    if (cart) {
+      setIsCart(cart.some((item) => item._id === courseId));
+    }
+  }, [cart, courseId]);
+
+  useEffect(() => {
+    if (User) {
+      setIsCoursePurchased(User.purchaseCourse.some((item) => item.courseId === courseId));
+    }
+  }, [User, courseId]);
 
   return (
     <>
       <div className="main-box">
         <div className="box-70">
-          <div
-            className="small-box"
-            style={{ backgroundColor: "#e8f0fc", color: "#6188b0" }}
-          >
+          <div className="small-box" style={{ backgroundColor: "#e8f0fc", color: "#6188b0" }}>
             Top rated {course.category} Course
           </div>
           <div className="small-box">
@@ -95,62 +126,42 @@ function TwoColumnLayout({ course, token, handlePurchase, purchaseLoading, isMod
             <p>{course.description}</p>
           </div>
           <div className="button-box">
-            <Link to={`/chapters/${course._id}`} className="small-box">
-              <button
-                className="btn box-button btn-1"
-                style={{ backgroundColor: "#196ae5" }}
-              >
+            <Link to={`/chapters/${course._id}`}>
+              <button className="btn box-button btn-1" style={{ backgroundColor: "#196ae5" }}>
                 Explore
               </button>
             </Link>
-            {isModify? (
-                <>
-              <Link to={`/educator/mycourse/udpatecourseinfo/${course._id}`} className="small-box">
-              <button
-                className="btn box-button btn-2"
-                style={{ border: "2px solid #196ae5" }}
-                onClick={handleClick}
-                >
-                Update
-                </button>
+            {isModify ? (
+              <>
+                <Link to={`/educator/mycourse/updatecourseinfo/${course._id}`} style={{ textDecoration: "none", outline: "none", boxShadow: "none" }}>
+                  <button className="btn box-button btn-2" style={{ border: "2px solid #196ae5" }}>
+                    Update
+                  </button>
                 </Link>
-                <ModalComponent func={deleteCourse} alert={"Delete"} alertTitle={"Delete course"} alertMessage={"By clicking, It will delete all the resources of course for permanent."} buttonStyle={"danger"} confirm={"Delete"} titleColor={"red"} loading={deleteLoading} />
-                </>
-                ) : (
-              !purchaseLoading ? (
-                <button
-                className="btn box-button btn-2"
-                style={{ border: "2px solid #196ae5" }}
-                onClick={handleClick}
-                >
-                Apply
+                <ModalComponent func={deleteCourse} alert="Delete" alertTitle="Delete course" alertMessage="By clicking, It will delete all the resources of course permanently." buttonStyle="danger" confirm="Delete" titleColor="red" loading={deleteLoading} />
+              </>
+            ) : !isCoursePurchased && !purchaseLoading ? (
+              <>
+                <button className="btn box-button btn-2" onClick={handleClick}>
+                  Apply
                 </button>
-              ) : (
-              <button class="btn btn-warning box-button" type="button" disabled>
-              <span
-              class="spinner-border spinner-border-sm"
-              aria-hidden="true"
-              ></span>
-              <span class="visually-hidden" role="status">
-              Loading...
-              </span>
-              </button>
-            )  
-            )}
-               
+                {
+                  cartLoading ?
+                  (<button class="btn btn-`success` : `danger`} box-button" type="button" disabled>
+                    <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+                    <span class="visually-hidden" role="status">Loading...</span>
+                  </button>) :
+                  (<button className={`btn btn-2 box-button`} style={{backgroundColor: isCart ? `red` : `green`, color: "white"}} onClick={addToCart}>
+                  {isCart ? "Remove Cart" : "Add Cart"}
+                </button>)
+                }
+              </>
+            ) : null}
           </div>
           <div className="small-box">
             <div className="info-container">
               <div className="info-item">
-                <h4>
-                  {loading ? (
-                    <Loading></Loading>
-                  ) : ratings ? (
-                    `${ratings} ⭐`
-                  ) : (
-                    "No ratings available"
-                  )}
-                </h4>
+                <h4>{loading ? <Loading /> : ratings ? `${ratings} ⭐` : "No ratings available"}</h4>
                 <p>Ratings</p>
               </div>
               <div className="info-item">
@@ -173,25 +184,8 @@ function TwoColumnLayout({ course, token, handlePurchase, purchaseLoading, isMod
         </div>
       </div>
 
-      <div
-        className="contact-info my-3"
-        style={{
-          width: "100vw",
-          height: "fit-content",
-          backgroundColor: "#fff5e5",
-        }}
-      >
-        For more info contact us:{" "}
-        <Link
-          to={`tel:${course.mobilenumber || "1234567890"}`}
-          style={{
-            color: "black",
-            textDecoration: "none",
-            fontWeight: "bold",
-          }}
-        >
-          {course.mobilenumber || "1234567890"}
-        </Link>
+      <div className="contact-info my-3" style={{ width: "100vw", height: "fit-content", backgroundColor: "#fff5e5" }}>
+        For more info contact us: <Link to={`tel:${course.mobilenumber || "1234567890"}`} style={{ color: "black", textDecoration: "none", fontWeight: "bold" }}>{course.mobilenumber || "1234567890"}</Link>
       </div>
     </>
   );

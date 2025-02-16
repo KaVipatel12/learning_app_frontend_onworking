@@ -4,9 +4,15 @@ import PhotoPara from '../components/PhotoPara';
 import Card from '../components/Card';
 import Carousel from '../components/Carousel';
 import Categories from '../components/Categories';
+import UseCourseRedirect from '../components/UseCourseRedirect';
+import { useAuth } from '../store/Auth';
 
 function Home() {
   const APP_URI = "http://localhost:8000";
+  const {Provider} = useAuth(); 
+  const courseId = null
+  UseCourseRedirect(Provider, courseId , "/educator/profile")
+
   const carouselImages = [
     {     
       index: "1",

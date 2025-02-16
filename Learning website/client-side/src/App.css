@@ -9,6 +9,9 @@ h1 {
   font-family : Poppins ; 
   color : rgb(164, 202, 236);
 }
+button{
+  text-decoration: none;
+}
 .container-para , .container-card {
   display: flex;
   flex-direction: row;
@@ -110,6 +113,7 @@ img {
    flex-direction: row;
    justify-content: center;
    align-items: center;
+   gap: 10px;
 }
 
 @media (max-width: 800px) {
@@ -198,6 +202,9 @@ img {
     width: 150px; 
     border-radius: 30px;
     font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer; /* Add pointer cursor to indicate button is clickable */
     transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease; /* Smooth transition effects */
 }
@@ -360,8 +367,8 @@ p {
 }
 @media (width < 385px) {
 .box-button{
-  height: 40px;
-  width: 80px;
+  height: 60px;
+  width: 100px;
   font-size: 12px;
 }
 }

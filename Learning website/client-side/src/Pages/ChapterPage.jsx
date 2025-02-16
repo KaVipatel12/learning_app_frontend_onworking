@@ -18,8 +18,7 @@ function ChapterPage() {
   const token = localStorage.getItem('token')
   const navigate = useNavigate()
   
-  // Fetch function to retrieve chapters of particular course
-  
+
   useEffect(() => {
     const FetchAllChapter = async () => {
       try {

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 export const Authcontext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [isUser , setIsUser] = useState(false)
   const [isProvider , setIsProvider] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
+  const [cart, setCart] = useState([])
   // function of storing the tokens in the localstorage
   const storeTokenLocalStorage = (serverToken) => {
     localStorage.setItem("token", serverToken);
@@ -79,11 +80,38 @@ export const AuthProvider = ({ children }) => {
     }
 };
 
-
   ProviderProfile();
   UserProfile();
 }, [token])
  
+ const fetchCart = useCallback(async () => {
+  if (!token) {
+    setCart([]);
+    return;
+}
+
+try {
+    const response = await fetch(`${API_URL}/api/fetchcart`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+    });
+    const data = await response.json();
+    if (response.ok) {
+        setCart(data.msg); 
+    } else {
+        setCart([]); 
+    }
+} catch (error) {
+  setCart([]);
+}
+}, [token])
+
+useEffect(()=> {
+  fetchCart()
+}, [fetchCart])
  return (
     <Authcontext.Provider
       value={{
@@ -94,7 +122,8 @@ export const AuthProvider = ({ children }) => {
         isUser,
         isProvider,
         Provider,
-        isAdmin
+        isAdmin,
+        cart
       }}
     >
       {children}

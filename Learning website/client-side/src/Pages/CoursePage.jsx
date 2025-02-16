@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify';
 import Navbar from '../components/Navbar';
 import Loading from "../components/Loading"
 import TwoColumnLayout from '../components/TwoColumnLayout';
+import UseCourseRedirect from '../components/UseCourseRedirect';
+import { useAuth } from '../store/Auth';
 function CoursePage() {
   const APP_URI = "http://localhost:8000";
   const {courseId} = useParams()
@@ -12,11 +14,13 @@ function CoursePage() {
   const [loading, setLoading] = useState(false)
   const [purchaseLoading, setPurchaseLoading] = useState(false)
   const navigate = useNavigate()
+  const {Provider} = useAuth()
   const token = localStorage.getItem("token")
-  // Fetch function to retrieve chapters of particular course
 
-  useEffect(() => {
-    const FetchCourse = async () => {
+  // Redirect the user if the user is educator and he doesn't own that course
+   UseCourseRedirect(Provider, courseId, -1); 
+  // Fetch function to retrieve chapters of particular course
+    const FetchCourse = useCallback(async () => {
       setLoading(true)
       try {
         const response = await fetch(
@@ -48,11 +52,11 @@ function CoursePage() {
       }finally{
         setLoading(false); 
     }
-    };
-  
-    // Fetch chapters on component mount
-      FetchCourse();
     }, [courseId, navigate, token]);
+
+    useEffect(() => {
+      FetchCourse();
+    }, [FetchCourse]);
 
     const handlePurchase = async () => {
       setPurchaseLoading(true)
@@ -75,7 +79,8 @@ function CoursePage() {
         const data = await response.json();
         console.log(data)
         if (response.ok) {
-          toast.success(data.msg)
+          toast.success(data.msg)          
+          navigate(0)
           setPurchaseLoading(false)
         } else {
           toast.error(data.msg)
