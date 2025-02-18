@@ -40,6 +40,8 @@ function Register() {
         toast.success("Registration Successful");
         if(role === "provider"){
         navigate("/educator/profile");
+        }else{
+          navigate("/category")
         }
       } else {
         setLoading(false);

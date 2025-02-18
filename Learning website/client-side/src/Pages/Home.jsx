@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from '../components/Navbar';
 import PhotoPara from '../components/PhotoPara';
 import Card from '../components/Card';
@@ -9,7 +9,8 @@ import { useAuth } from '../store/Auth';
 
 function Home() {
   const APP_URI = "http://localhost:8000";
-  const {Provider} = useAuth(); 
+  const {Provider, User} = useAuth(); 
+  const token = localStorage.getItem("token")
   const courseId = null
   UseCourseRedirect(Provider, courseId , "/educator/profile")
 
@@ -59,6 +60,8 @@ function Home() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState("");  // State for selected category
+  const [studentCategoryCourses, setStudentCategoryCourses] = useState([]);  // Stores the courses of student interest
+  const [studentCourses, setStudentCourses] = useState([])
 
   // Fetch function to retrieve courses based on category
   const FetchCoursesByCategory = async (category) => {
@@ -87,15 +90,63 @@ function Home() {
     }
   };
 
+// Fetch function to retrieve courses based on student's category
+  const fetchCourseStudentCategory = useCallback(async () => {
+    setLoading(true);  
+    try {
+      const response = await fetch(`${APP_URI}/api/fetchcategorycourses`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization" : `Bearer ${token}`
+        },
+      });
+
+      const data = await response.json();
+      console.log( "Student cateogry courses" +  data.msg); 
+      if (response.ok) {
+        setStudentCategoryCourses(data.msg); // Set courses based on response
+      } else {
+        setStudentCategoryCourses([]);
+      }
+    } catch (error) {
+      setStudentCategoryCourses([]);     
+    } finally {
+      setLoading(false);  // Set loading state to false after fetching
+    }
+  }, [token]);
+
   // Fetch courses when category changes
   useEffect(() => {
     FetchCoursesByCategory(category);  // Fetch based on selected category
+
   }, [category]);  // Trigger when category changes
+
+  useEffect(() => {
+   if(User){
+    setStudentCourses(User.purchaseCourse || ""); 
+   }
+  }, [User])
+  useEffect(() => {   
+    if(token){
+      fetchCourseStudentCategory()
+    }
+  }, [fetchCourseStudentCategory, token]);  // Trigger when category changes
 
   return (
     <>
       <Navbar />
       <Carousel carouselImages={carouselImages} />
+      { studentCourses &&
+        <>
+      <center className="mt-4">
+        <h2 style={{ color: "#2c3e50", fontFamily: "Poopins", backgroundColor : "#f0f8ff", width : "fit-content"}}> Purchased Courses </h2>
+        <br />
+      </center>
+      <Card loading={loading} courses={studentCourses} />
+      </>
+      }
+
       <center className="mt-4">
         <h2 style={{ color: "#2c3e50", fontFamily: "Poopins", backgroundColor : "#f0f8ff", width : "fit-content"}}>Explore the trending courses</h2>
         <br />
@@ -104,6 +155,17 @@ function Home() {
         <Categories categories={categories} onCategoryClick={setCategory} />
       </center>
       <Card loading={loading} courses={courses} />
+      {
+        studentCategoryCourses ? (
+        <> 
+        <center className="mt-4">
+        <h2 style={{ color: "#2c3e50", fontFamily: "Poopins", backgroundColor : "#f0f8ff", width : "fit-content"}}>Courses that might Interest you</h2>
+        <br />
+      </center>
+      <Card loading={loading} courses={studentCategoryCourses} />
+        </> 
+    ) : (null)
+    }
       <div>
         {infoData.map((data, index) => (
           <PhotoPara
