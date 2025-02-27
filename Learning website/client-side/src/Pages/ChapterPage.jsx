@@ -6,6 +6,7 @@ import Loading from '../components/Loading';
 import ReviewStars from '../components/ReviewStars';
 import CommentBox from '../components/CommentBox';
 import ThreeDotButton from '../components/ThreeDotButton';
+import ProviderNavbar from '../components/ProviderNavbar';
 
 function ChapterPage() {
   const APP_URI = "http://localhost:8000";
@@ -93,7 +94,10 @@ function ChapterPage() {
     if(loading || deleteLoading){
       return (
         <>
+        {courseOwner ? 
+        <ProviderNavbar /> : 
         <Navbar></Navbar>
+        }
         <Loading></Loading>
         </>
       )
@@ -102,7 +106,8 @@ function ChapterPage() {
   return (
 
       <>
-      <Navbar />
+
+      {courseOwner ? < ProviderNavbar/> : <Navbar /> }
 
     { chapter ? (
       <>

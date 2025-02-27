@@ -2,7 +2,7 @@ import React from "react";
 import Loading from "./Loading";
 import { Link } from "react-router-dom";
 
-function Card({ loading = false, courses, borderRadius = "10px", backgroundColor = "white", isCart = false, functions}) {
+function Card({ loading = false, courses, borderRadius = "10px", backgroundColor = "white", isCart = false, functions, verticleContainer = false}) {
   const APP_URI = "http://localhost:8000";
 
   if (loading) {
@@ -11,7 +11,7 @@ function Card({ loading = false, courses, borderRadius = "10px", backgroundColor
 
   return (
     <>
-      <div className="container search-container-card">
+      <div className={`${verticleContainer ? `verticle-container` : `container`} search-container-card`}>   {/* Card ko horizontal scrolling de ya verticle ya idhar sa decide hoga */}
         {courses?.length > 0 ? (
           courses.map((course) => (            
             <Link

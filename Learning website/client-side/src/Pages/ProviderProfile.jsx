@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../store/Auth"; // Custom Auth hook
 import {useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar.jsx";
 import "../Profile.css";
 import Loading from "../components/Loading.jsx";
 import Card from "../components/Card.jsx"; // Import the Card component
+import ProviderNavbar from "../components/ProviderNavbar.jsx";
 
 function ProviderProfile() {
 
@@ -68,7 +68,7 @@ function ProviderProfile() {
     // Display a loading spinner or message while loading
     return (
       <>
-        <Navbar />
+        <ProviderNavbar />
         <center>
           <Loading />
         </center>
@@ -78,7 +78,7 @@ function ProviderProfile() {
 
   return (
     <>
-      <Navbar />
+      <ProviderNavbar />
       <div className="profile-main" style={{ width: "100%", overflow: "auto" }}>
         <div className="row">
           <div className="flex-box-profile">

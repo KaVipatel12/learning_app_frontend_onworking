@@ -9,25 +9,26 @@ import { useAuth } from '../store/Auth';
 
 function Home() {
   const APP_URI = "http://localhost:8000";
-  const {Provider, User} = useAuth(); 
-  const token = localStorage.getItem("token")
-  const courseId = null
-  UseCourseRedirect(Provider, courseId , "/educator/profile")
+  const { Provider, User } = useAuth(); 
+  const token = localStorage.getItem("token");
+  const courseId = null;
+  UseCourseRedirect(Provider, courseId , "/educator/profile");
 
   const carouselImages = [
-    {     
-      index: "1",
-      img: "./photos/homeimage1.jpg",
-    },
-    {
-      index: "2",
-      img: "./photos/homeimage3.jpg"
-    },
-    {
-      index: "3",
-      img: "./photos/homeimage2.jpg",
-      heading : "Get skilled by top educators"
-    }
+    { index: "1", img: "./photos/homeimage1.jpg" },
+    { index: "2", img: "./photos/homeimage3.jpg" },
+    { index: "3", img: "./photos/homeimage2.jpg", heading: "Get skilled by top educators" }
+  ];
+
+  const categories = [
+    { title: "Web Development" },
+    { title: "Artificial Intelligence" },
+    { title: "Data Science" },
+    { title: "Cloud Computing" },
+    { title: "Blockchain" },
+    { title: "Cybersecurity" },
+    { title: "Programming" },
+    { title: "Cloudflare Category" },
   ];
 
   const infoData = [
@@ -47,133 +48,152 @@ function Home() {
       paragraph: "Share your knowledge and passion with eager learners while earning money. Become a mentor and make a lasting impact, all while enriching your professional journey as an educator.."
     }
   ];
-
-  const categories = [
-    { title: "Programming" },
-    { title: "Data Science" },
-    { title: "Machine Learning" },
-    { title: "Chatgpt" },
-    { title: "MBA" }
-  ];
-
-  // State to hold the fetched courses
+  
+  // State Variables
   const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [category, setCategory] = useState("");  // State for selected category
-  const [studentCategoryCourses, setStudentCategoryCourses] = useState([]);  // Stores the courses of student interest
-  const [studentCourses, setStudentCourses] = useState([])
+  const [coursesLoading, setCoursesLoading] = useState(false);
+  const [category, setCategory] = useState(""); 
+  const [studentCategoryCourses, setStudentCategoryCourses] = useState([]);
+  const [studentCourses, setStudentCourses] = useState([]);
+  const [page, setPage] = useState(1); 
+  const [totalCourses, setTotalCourses] = useState(0);
+  const coursesPerPage = 4;
+  const lastPage = Math.ceil(totalCourses / coursesPerPage);
 
-  // Fetch function to retrieve courses based on category
-  const FetchCoursesByCategory = async (category) => {
-    setLoading(true);  // Set loading state to true while fetching
-
-    const fetchURL = category ? `/api/course/fetchcourses?category=${category}` : "/api/course/fetchcourses";  // Build URL with category if available
-
+  // Fetch courses based on category & page
+  const FetchCoursesByCategory = useCallback(async (selectedCategory, pageNumber) => {
+    setCoursesLoading(true);
     try {
+      const fetchURL = selectedCategory 
+        ? `/api/course/fetchcourses?category=${selectedCategory}&page=${pageNumber}`
+        : `/api/course/fetchcourses?page=${pageNumber}`;
+
       const response = await fetch(`${APP_URI}${fetchURL}`, {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" }
       });
 
       const data = await response.json();
       if (response.ok) {
-        setCourses(data.msg); // Set courses based on response
+        setCourses(data.msg);
+        setTotalCourses(data.totalCourses);
       } else {
-        setCourses([]); // Set empty array if no courses found
+        setCourses([]);
       }
     } catch (error) {
-      setCourses([]);  // Set empty courses array in case of error
+      setCourses([]);
     } finally {
-      setLoading(false);  // Set loading state to false after fetching
+      setCoursesLoading(false);
     }
-  };
+  }, []);
 
-// Fetch function to retrieve courses based on student's category
+  // Fetch student category courses (ONLY ONCE when token is available)
   const fetchCourseStudentCategory = useCallback(async () => {
-    setLoading(true);  
+    if (!token) return; // Prevent unnecessary API calls
     try {
       const response = await fetch(`${APP_URI}/api/fetchcategorycourses`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization" : `Bearer ${token}`
+          "Authorization": `Bearer ${token}`
         },
       });
 
       const data = await response.json();
-      console.log( "Student cateogry courses" +  data.msg); 
       if (response.ok) {
-        setStudentCategoryCourses(data.msg); // Set courses based on response
+        setStudentCategoryCourses(data.msg);
       } else {
         setStudentCategoryCourses([]);
       }
     } catch (error) {
-      setStudentCategoryCourses([]);     
-    } finally {
-      setLoading(false);  // Set loading state to false after fetching
+      setStudentCategoryCourses([]);
     }
   }, [token]);
 
-  // Fetch courses when category changes
+  // Fetch courses when category or page changes
   useEffect(() => {
-    FetchCoursesByCategory(category);  // Fetch based on selected category
+    FetchCoursesByCategory(category, page);
+  }, [category, page, FetchCoursesByCategory]);
 
-  }, [category]);  // Trigger when category changes
-
+  // Fetch user courses (Only Once)
   useEffect(() => {
-   if(User){
-    setStudentCourses(User.purchaseCourse || ""); 
-   }
-  }, [User])
-  useEffect(() => {   
-    if(token){
-      fetchCourseStudentCategory()
+    if (User) {
+      setStudentCourses(User.purchaseCourse || []);
     }
-  }, [fetchCourseStudentCategory, token]);  // Trigger when category changes
+  }, [User]);
+
+  // Fetch student category courses only once
+  useEffect(() => {
+    fetchCourseStudentCategory();
+  }, [fetchCourseStudentCategory]);
 
   return (
     <>
       <Navbar />
       <Carousel carouselImages={carouselImages} />
-      { studentCourses &&
+
+      {studentCourses.length > 0 && (
         <>
-      <center className="mt-4">
-        <h2 style={{ color: "#2c3e50", fontFamily: "Poopins", backgroundColor : "#f0f8ff", width : "fit-content"}}> Purchased Courses </h2>
-        <br />
-      </center>
-      <Card loading={loading} courses={studentCourses} />
-      </>
-      }
+          <center className="mt-4">
+            <h2 style={{ color: "#2c3e50", fontFamily: "Poppins", backgroundColor: "#f0f8ff", width: "fit-content" }}>
+              Purchased Courses
+            </h2>
+            <br />
+          </center>
+          <Card loading={false} courses={studentCourses} />
+        </>
+      )}
 
       <center className="mt-4">
-        <h2 style={{ color: "#2c3e50", fontFamily: "Poopins", backgroundColor : "#f0f8ff", width : "fit-content"}}>Explore the trending courses</h2>
+        <h2 style={{ color: "#2c3e50", fontFamily: "Poppins", backgroundColor: "#f0f8ff", width: "fit-content" }}>
+          Explore the trending courses
+        </h2>
         <br />
       </center>
+
       <center className="categories">
-        <Categories categories={categories} onCategoryClick={setCategory} />
+        <Categories categories={categories} onCategoryClick={(newCategory) => {
+          setCategory(newCategory);
+          setPage(1); // Reset pagination when changing category
+        }} />
       </center>
-      <Card loading={loading} courses={courses} />
-      {
-        studentCategoryCourses ? (
-        <> 
-        <center className="mt-4">
-        <h2 style={{ color: "#2c3e50", fontFamily: "Poopins", backgroundColor : "#f0f8ff", width : "fit-content"}}>Courses that might Interest you</h2>
-        <br />
-      </center>
-      <Card loading={loading} courses={studentCategoryCourses} />
-        </> 
-    ) : (null)
-    }
+
+      <Card loading={coursesLoading} courses={courses} />
+
+      {/* Pagination Controls */}
+      <div className="flex-end-button">
+        <button
+          className="btn btn-primary"
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+        >
+          Previous
+        </button>
+
+        <button
+          className="btn btn-primary"
+          onClick={() => setPage((prev) => Math.min(prev + 1, lastPage))}
+          disabled={page >= lastPage}
+        >
+          Next
+        </button>
+      </div>
+
+      {studentCategoryCourses.length > 0 && (
+        <>
+          <center className="mt-4">
+            <h2 style={{ color: "#2c3e50", fontFamily: "Poppins", backgroundColor: "#f0f8ff", width: "fit-content" }}>
+              Courses that might interest you
+            </h2>
+            <br />
+          </center>
+          <Card loading={false} courses={studentCategoryCourses} />
+        </>
+      )}
+
       <div>
         {infoData.map((data, index) => (
-          <PhotoPara
-            key={index}
-            imageUrl={data.img1}
-            heading={data.heading}
-            paragraph={data.paragraph}
-          />
+          <PhotoPara key={index} imageUrl={data.img1} heading={data.heading} paragraph={data.paragraph} />
         ))}
       </div>
     </>

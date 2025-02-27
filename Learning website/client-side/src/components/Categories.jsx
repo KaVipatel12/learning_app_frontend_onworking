@@ -54,7 +54,7 @@ function Categories({ categories, onCategoryClick }) {
           padding: "10px 0",
         }}
       >
-        {categories.map((category, index) => (
+        {categories?.map((category, index) => (
           <button
             key={index}
             className={`category-button ${selectedCategory === category.title ? 'active' : ''}`} // Add 'active' class if it's the selected one

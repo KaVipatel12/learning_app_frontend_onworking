@@ -12,6 +12,12 @@ h1 {
 button{
   text-decoration: none;
 }
+.flex-end-button{
+  width: 100%;
+  display: flex;
+  justify-content:space-around;
+  align-items: center;
+}
 .container-para , .container-card {
   display: flex;
   flex-direction: row;
@@ -71,6 +77,13 @@ button{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
+.verticle-container{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 .container-para{
   background-color: #f0f8ff;
@@ -527,4 +540,135 @@ p {
 
 .flex-button button{
   height: 50px;
+}
+
+/* filter bar  */
+
+/* General Page Styling */
+.search-courses-page {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+/* Sidebar Filter Styling */
+
+.close{
+  visibility: hidden;
+  height: 0;
+}
+.filter-bar {
+  width: 25%;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.filter-bar h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.filter-bar label {
+  font-weight: 600;
+  color: #555;
+  display: block;
+  margin: 10px 0 5px;
+}
+
+.filter-bar select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+}
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.search-bar button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.search-bar button:hover {
+  background-color: #0056b3;
+}
+
+/* Main Content Section */
+.main-section {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Course Card Grid */
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+/* Button for Reset Filters */
+.clear-filters {
+  width: 100%;
+  padding: 10px;
+  background: #dc3545;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.clear-filters:hover {
+  background: #c82333;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .search-courses-page {
+    flex-direction: column;
+  }
+
+  .filter-bar {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-bar {
+    flex-direction: column;
+  }
+
+  .search-bar input,
+  .search-bar button {
+    width: 100%;
+  }
 }
